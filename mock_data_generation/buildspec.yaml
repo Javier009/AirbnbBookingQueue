@@ -19,4 +19,6 @@ phases:
       # Working dir may reset; always cd via absolute path
       - cd "$CODEBUILD_SRC_DIR/mock_data_generation"
       - echo "Updating Lambda function code..."
-      - aws lambda update-function-code --function-name airbnb-mock-reservations --zip-file fileb://package.zip
+      - aws lambda update-function-code --function-name airbnb-mock-reservations --zip-file "fileb://$CODEBUILD_SRC_DIR/mock_data_generation/package.zip"
+
+      
