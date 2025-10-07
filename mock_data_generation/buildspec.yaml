@@ -4,19 +4,21 @@ phases:
   install:
     runtime-versions:
       python: 3.12
+
   build:
     commands:
       - set -eux
       - echo "Repo root:" && pwd && ls -la
       - cd "$CODEBUILD_SRC_DIR/mock_data_generation"
       - echo "In mock_data_generation:" && pwd && ls -la
-      - test -f .py
+
+      - test -f generate_reservations_data.py
+
       - zip -r9 package.zip generate_reservations_data.py
       - unzip -l package.zip
 
   post_build:
     commands:
-      # Working dir may reset; always cd via absolute path
       - cd "$CODEBUILD_SRC_DIR/mock_data_generation"
       - echo "Updating Lambda function code..."
-      - aws lambda update-function-code --function-name airbnb-mock-reservations --zip-file fileb://package.zip
+      - aws lambda update-function-code --function-name airbnb-mock-reservations --zip-file "fileb://package.zip"
