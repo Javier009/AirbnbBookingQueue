@@ -20,6 +20,14 @@ def lambda_handler(event, context):
         WaitTimeSeconds=5       
     )
 
+    # msg_number_respose = sqs.get_queue_attributes(
+    # QueueUrl=queue_url,
+    # AttributeNames=['ApproximateNumberOfMessages']
+    # )
+
+    # num_messages = int(msg_number_respose['Attributes']['ApproximateNumberOfMessages'])
+    # print("Number of messages in the queue:", num_messages)
+
     messages = response.get('Messages', [])
 
     print("Total messages received in the batch : ",len(messages))
@@ -89,5 +97,5 @@ def lambda_handler(event, context):
             'body': json.dumps('No long-term reservations to process.')
         }
 
-if __name__ == "__main__":
-    lambda_handler(None, None)
+# if __name__ == "__main__":
+#     lambda_handler(None, None)
