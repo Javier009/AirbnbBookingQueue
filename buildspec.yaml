@@ -1,0 +1,41 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+
+  build:
+    commands:
+      - set -eux
+      - echo "Repo root:" && pwd && ls -la
+      - cd "$CODEBUILD_SRC_DIR/mock_data_generation"
+      - echo "In mock_data_generation:" && pwd && ls -la
+
+      - test -f generate_reservations_data.py
+
+      - zip -r9 package.zip generate_reservations_data.py
+      - unzip -l package.zip
+      
+      - cd "$CODEBUILD_SRC_DIR" # Move to root to access other dir
+
+      - cd "$CODEBUILD_SRC_DIR/reservations_processing"
+      - echo "In reservations_processing:" && pwd && ls -la
+
+      - test -f long_term_reservations_processing.py
+      
+      - zip -r9 package_reservations_processing.zip long_term_reservations_processing.py
+      - unzip -l package_reservations_processing.zip
+
+  post_build:
+
+    commands:
+      - cd "$CODEBUILD_SRC_DIR/mock_data_generation"
+      - echo "Updating Lambda function code..."
+      - aws lambda update-function-code --function-name airbnb-mock-reservations --zip-file "fileb://package.zip"
+
+      - cd "$CODEBUILD_SRC_DIR" # Move to root to access other dir
+
+      - cd "$CODEBUILD_SRC_DIR/reservations_processing"
+      - echo "Updating Lambda function code..."
+      - aws lambda update-function-code --function-name Airbnb-reserveation-processing --zip-file "fileb://package_reservations_processing.zip"
