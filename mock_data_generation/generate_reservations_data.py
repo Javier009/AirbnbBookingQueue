@@ -42,7 +42,7 @@ def generate_mock_reservation_data(num_records):
 def lambda_handler(event, context):
 
     try:
-        num_records = random.randint(30,50)
+        num_records = random.randint(100,300)
         records = generate_mock_reservation_data(num_records=num_records)
         print(f"Generated {num_records} mock reservation records.")
         
