@@ -34,6 +34,8 @@ phases:
       - echo "Updating Lambda function code..."
       - aws lambda update-function-code --function-name airbnb-mock-reservations --zip-file "fileb://package.zip"
 
+      - cd "$CODEBUILD_SRC_DIR" # Move to root to access other dir
+
       - cd "$CODEBUILD_SRC_DIR/reservations_processing"
       - echo "Updating Lambda function code..."
       - aws lambda update-function-code --function-name Airbnb-reserveation-processing --zip-file "fileb://package_reservations_processing.zip"
