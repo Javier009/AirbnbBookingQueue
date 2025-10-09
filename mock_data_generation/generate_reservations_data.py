@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import json
 import random
 import boto3
 
@@ -49,7 +50,7 @@ def lambda_handler(event, context):
         for record in records:
             sqs_client.send_message(
                 QueueUrl='https://sqs.us-east-1.amazonaws.com/652734276321/AirbnbBookingQueue',
-                MessageBody=str(record)
+                MessageBody= json.dumps(record)
             )
         print(f"{num_records} mock reservation records sent to SQS.")
 
